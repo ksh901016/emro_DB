@@ -23,8 +23,7 @@ public class PostingMemStore implements PostingStore {
     @Override
     public Posting retrieve(String postingId) {
         // 
-    	//TODO
-    	return null;
+    	return repo.selectPosting(postingId);
     }
 
     @Override

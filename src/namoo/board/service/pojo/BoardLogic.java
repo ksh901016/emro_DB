@@ -34,9 +34,9 @@ public class BoardLogic implements BoardService {
 
     @Override
     public Posting findPosting(String postingId) {
-        //
-        //TODO
-    	return null;
+    	
+    	Posting posting = postingStore.retrieve(postingId);
+    	return posting;
     }
 
     @Override

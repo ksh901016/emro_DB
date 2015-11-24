@@ -70,8 +70,7 @@ public class BoardRepository {
     
     public Posting selectPosting(String postingId) {
         //
-    	//TODO
-    	return null;
+    	return postingMap.get(postingId);
     }
     
     public List<Posting> selectAllPosting(String boardId) {
