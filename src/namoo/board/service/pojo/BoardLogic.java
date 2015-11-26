@@ -9,50 +9,62 @@ import namoo.board.entity.Posting;
 import namoo.board.service.BoardService;
 import namoo.board.store.BoardStore;
 import namoo.board.store.PostingStore;
+import namoo.board.store.jdbc.BoardJdbcStore;
+import namoo.board.store.jdbc.PostingJdbcStore;
 import namoo.board.store.mem.BoardMemStore;
 import namoo.board.store.mem.PostingMemStore;
 
 public class BoardLogic implements BoardService {
 
-    private BoardStore boardStore;
-    private PostingStore postingStore;
-    
-    public BoardLogic() {
-        //
-        this.boardStore = new BoardMemStore();
-        this.postingStore = new PostingMemStore();
-    }
-    
-    @Override
-    public void registerPosting(Posting posting) {
-        //
-        Date today = new Date(Calendar.getInstance().getTimeInMillis());
-        posting.setRegDate(today);
-        
-        postingStore.create(posting);
-    }
+	private BoardStore boardStore;
+	private PostingStore postingStore;
 
-    @Override
-    public Posting findPosting(String postingId) {
-    	
-    	Posting posting = postingStore.retrieve(postingId);
-    	return posting;
-    }
+	public BoardLogic() {
+		//
+		this.boardStore = new BoardJdbcStore();
+		this.postingStore = new PostingJdbcStore();
+	}
 
-    @Override
-    public Board findBoard(String boardId) {
-        // 
-        Board board = boardStore.retrieve(boardId);
-        
-        if (board == null) {
-        	return null;
-        }
-        
-        List<Posting> postings = postingStore.retrieveAll(boardId);
-        board.setPostings(postings);
-        
-        return board;
-    }
+	@Override
+	public void registerPosting(Posting posting) {
+		//
+		Date today = new Date(Calendar.getInstance().getTimeInMillis());
+		posting.setRegDate(today);
+		String postingId = "";
+		if (postingStore.retrieveMaxPostingId() != null) {
+			postingId = String.format("%04d", (Integer.parseInt(postingStore.retrieveMaxPostingId())) + 1);
+		} else {
+			postingId = String.format("%04d", 1);
+		}
+		posting.setPostingId(postingId);
+
+		postingStore.create(posting);
+	}
+
+	@Override
+	public Posting findPosting(String postingId) {
+
+		if (postingStore.retrieve(postingId) != null) {
+			return postingStore.retrieve(postingId);
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public Board findBoard(String boardId) {
+		//
+		Board board = boardStore.retrieve(boardId);
+
+		if (board == null) {
+			return null;
+		}
+
+		List<Posting> postings = postingStore.retrieveAll(boardId);
+		board.setPostings(postings);
+
+		return board;
+	}
 
 	@Override
 	public void removePosting(String postingId) {
@@ -62,29 +74,35 @@ public class BoardLogic implements BoardService {
 
 	@Override
 	public void modifyPosting(Posting posting) {
-		// 
-		Posting before = 
-				postingStore.retrieve(posting.getPostingId());
-		
+		//
+		Posting before = postingStore.retrieve(posting.getPostingId());
+
 		// 제목, 내용만 교체
 		before.setTitle(posting.getTitle());
 		before.setContents(posting.getContents());
-		
+
 		postingStore.update(before);
 	}
 
 	@Override
 	public void registerBoard(Board board) {
-		// 
-        Date today = new Date(Calendar.getInstance().getTimeInMillis());
-        board.setCreatedDate(today);
-        
+		//
+		Date today = new Date(Calendar.getInstance().getTimeInMillis());
+		board.setCreatedDate(today);
+		String boardId = "";
+		if (boardStore.retrieveMaxBoardId() != null) {
+			boardId = String.format("%04d", Integer.parseInt(boardStore.retrieveMaxBoardId()) + 1);
+		} else {
+			boardId = String.format("%04d", 1);
+		}
+		board.setBoardId(boardId);
+
 		boardStore.create(board);
 	}
 
 	@Override
 	public List<Board> findAllBoards() {
-		// 
+		//
 		return boardStore.retrieveAll();
 	}
 }

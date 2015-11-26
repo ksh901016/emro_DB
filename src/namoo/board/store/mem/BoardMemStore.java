@@ -43,4 +43,10 @@ public class BoardMemStore implements BoardStore {
 		// 
 		return repo.selectAllBoards();
 	}
+
+	@Override
+	public String retrieveMaxBoardId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

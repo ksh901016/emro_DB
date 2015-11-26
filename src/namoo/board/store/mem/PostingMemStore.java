@@ -44,4 +44,10 @@ public class PostingMemStore implements PostingStore {
         repo.deletePosting(postingId);
     }
 
+	@Override
+	public String retrieveMaxPostingId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

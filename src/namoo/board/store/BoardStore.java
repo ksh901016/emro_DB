@@ -11,4 +11,5 @@ public interface BoardStore {
     void update(Board board);
     void delete(String boardId);
 	List<Board> retrieveAll();
+	String retrieveMaxBoardId();
 }

@@ -11,4 +11,5 @@ public interface PostingStore {
     List<Posting> retrieveAll(String boardId);
     void update(Posting article);
     void delete(String articleId);
+    String retrieveMaxPostingId();
 }
