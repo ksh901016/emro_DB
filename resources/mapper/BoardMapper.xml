@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="namoo.board.mapper.BoardMapper">
+	<select id="selectAllBoards"  resultType="Board">
+		SELECT * FROM board;
+	</select>
+	
+	<insert id="insertBoard" parameterType="Board" >
+		INSERT INTO board(boardId,name,createdDate,creatorName) 
+		VALUES(#{boardId},#{name},#{createdDate},#{creatorName})
+	</insert>
+	
+	<select id="selectBoard" parameterType="String" resultType="Board">
+		SELECT * FROM board WHERE boardId=#{boardId}
+	</select>
+	
+	<select id="retrieveMaxBoardId" resultType="String">
+		SELECT max(boardId) AS boardId From board
+	</select>
+</mapper>

@@ -15,7 +15,7 @@ public class PostingJdbcStore implements PostingStore {
 
 	@Override
 	public String create(Posting article) {
-		String insertBoardSQL = "INSERT into posting(postingId,title,authorName,regDate,contents,boardId) VALUES(?,?,?,?,?,?)";
+		String insertPostSQL = "INSERT into posting(postingId,title,authorName,regDate,contents,boardId) VALUES(?,?,?,?,?,?)";
 		Connection con = null;
 		PreparedStatement stmt = null;
 //		String postingId = "";
@@ -26,7 +26,7 @@ public class PostingJdbcStore implements PostingStore {
 //		}
 		try {
 			con = JDBCUtil.getConnection();
-			stmt = con.prepareStatement(insertBoardSQL);
+			stmt = con.prepareStatement(insertPostSQL);
 			stmt.setString(1, article.getPostingId());
 			stmt.setString(2, article.getTitle());
 			stmt.setString(3, article.getAuthorName());
@@ -48,7 +48,7 @@ public class PostingJdbcStore implements PostingStore {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
-		Posting posting = null;
+		Posting posting = new Posting();
 		String selectPostingSQL = "SELECT * FROM posting WHERE postingId=?";
 		try {
 			con = JDBCUtil.getConnection();

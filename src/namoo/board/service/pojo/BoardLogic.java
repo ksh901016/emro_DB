@@ -13,6 +13,8 @@ import namoo.board.store.jdbc.BoardJdbcStore;
 import namoo.board.store.jdbc.PostingJdbcStore;
 import namoo.board.store.mem.BoardMemStore;
 import namoo.board.store.mem.PostingMemStore;
+import namoo.board.store.mybatis.BoardMybatisStore;
+import namoo.board.store.mybatis.PostingMybatisStore;
 
 public class BoardLogic implements BoardService {
 
@@ -21,8 +23,8 @@ public class BoardLogic implements BoardService {
 
 	public BoardLogic() {
 		//
-		this.boardStore = new BoardJdbcStore();
-		this.postingStore = new PostingJdbcStore();
+		this.boardStore = new BoardMybatisStore();
+		this.postingStore = new PostingMybatisStore();
 	}
 
 	@Override
