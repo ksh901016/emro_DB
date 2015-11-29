@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
-import namoo.board.comm.MyBatisUtil;
 import namoo.board.comm.PoolManager;
 import namoo.board.entity.Board;
 import namoo.board.mapper.BoardMapper;
@@ -17,20 +16,25 @@ public class BoardMybatisStore implements BoardStore {
 //	MyBatisUtil util = new MyBatisUtil();
 //	BoardMapper boardMapper = util.getMapper(BoardMapper.class);
 	//singleton 패턴
-	PoolManager pm = PoolManager.getInstance();
-	SqlSession session = pm.getSession();
-	BoardMapper boardMapper = session.getMapper(BoardMapper.class);
+	SqlSession session = null;
+	BoardMapper boardMapper = null;
 	
 	@Override
 	public String create(Board board) {
+		session = PoolManager.getInstance().getSession();
+		boardMapper = session.getMapper(BoardMapper.class);
 		boardMapper.insertBoard(board);
 		session.commit();
+		session.close();
 		return null;
 	}
 
 	@Override
 	public Board retrieve(String boardId) {
+		session = PoolManager.getInstance().getSession();
+		boardMapper = session.getMapper(BoardMapper.class);
 		Board board = boardMapper.selectBoard(boardId);
+		session.close();
 		return board;
 	}
 
@@ -48,14 +52,21 @@ public class BoardMybatisStore implements BoardStore {
 
 	@Override
 	public List<Board> retrieveAll() {
+		session = PoolManager.getInstance().getSession();
+		boardMapper = session.getMapper(BoardMapper.class);
 		List<Board> boardList = new ArrayList<Board>();
 		boardList = boardMapper.selectAllBoards();
+		session.close();
 		return boardList;
 	}
 
 	@Override
 	public String retrieveMaxBoardId() {
-		return boardMapper.retrieveMaxBoardId();
+		session = PoolManager.getInstance().getSession();
+		boardMapper = session.getMapper(BoardMapper.class);
+		String maxBoardId = boardMapper.retrieveMaxBoardId();
+		session.close();
+		return maxBoardId;
 	}
 
 }
